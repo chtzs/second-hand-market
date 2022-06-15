@@ -13,32 +13,32 @@
         <h3 class="title">八路军管理系统</h3>
       </div>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
+      <MyInput ref="username" v-model:text="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1"
+               auto-complete="on">
+        <template v-slot:prefix>
           <el-icon>
             <Avatar/>
           </el-icon>
-        </span>
-        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
-                  tabindex="1" auto-complete="on"/>
-      </el-form-item>
+        </template>
+      </MyInput>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
+      <MyInput ref="password" v-model:text="loginForm.password" placeholder="Password"
+               name="password" tabindex="2" auto-complete="on" prop="password"
+               :type="passwordType">
+        <template v-slot:prefix>
           <el-icon>
             <Lock/>
           </el-icon>
-        </span>
-        <el-input :key="passwordType" ref="password" v-model="loginForm.password"
-                  :type="passwordType" placeholder="Password" name="password" tabindex="2"
-                  auto-complete="on"/>
-        <span class="show-pwd" @click="showPwd">
-          <el-icon>
-            <Bell v-if="passwordType === 'password'"/>
-            <BellFilled v-if="passwordType !== 'password'"/>
-          </el-icon>
-        </span>
-      </el-form-item>
+        </template>
+        <template v-slot:suffix>
+          <span @click="showPwd">
+            <el-icon>
+              <Bell v-if="passwordType === 'password'"/>
+              <BellFilled v-if="passwordType !== 'password'"/>
+            </el-icon>
+          </span>
+        </template>
+      </MyInput>
       <div>
         <el-button type="primary" style="width:100%;margin-bottom:20px;">登录</el-button>
       </div>
@@ -51,6 +51,7 @@
   </div>
 </template>
 <script setup>
+import MyInput from "@/components/MyInput";
 import {Avatar, Lock, Bell, BellFilled} from '@element-plus/icons-vue';
 </script>
 
@@ -95,6 +96,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
+    },
+    register(){
+      this.$router.push('/register');
     }
   }
 }
@@ -104,64 +108,8 @@ export default {
 
 </style>
 
-<style lang="scss">
-$bg: #283443;
-$light_gray: #fff;
-$cursor: #fff;
-@supports (-webkit-mask: none) and (not (caret-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-.el-input__wrapper {
-  display: block !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-#app {
-  width: 100%;
-  height: 100%;
-  background: url(~@/assets/bg.jpg);
-  background-size: 100% 100%;
-}
-
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0;
-      -webkit-appearance: none;
-      border-radius: 0;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-
-    input::placeholder{
-      color: #ffffff;
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
+<style lang="css">
+@import url(~@/assets/css/background-img.css);
 </style>
 
 <style lang="scss" scoped>
@@ -198,7 +146,6 @@ $light_gray: #eee;
     padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
-
   }
 
   .tips {
@@ -206,14 +153,6 @@ $light_gray: #eee;
     text-align: center;
     color: #000;
     margin-bottom: 10px;
-  }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
   }
 
   .title-container {
