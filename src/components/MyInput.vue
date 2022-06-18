@@ -3,11 +3,7 @@
     <span class="prefix">
       <slot name="prefix"></slot>
     </span>
-    <el-input ref="rawInput" :placeholder="placeholder" :name="name" :type="type"
-              :tabindex="tabindex" :auto-complete="autoComplete" :prop="prop"
-              :model-value="text"
-              @input="updateText"
-              class="my-input"/>
+    <el-input ref="rawInput" v-bind="$attrs" class="my-input"/>
     <span class="suffix">
       <slot name="suffix"></slot>
     </span>
@@ -18,25 +14,7 @@
 
 export default {
   name: "MyInput",
-  props: {
-    placeholder: String,
-    name: String,
-    type: String,
-    tabindex: String,
-    autoComplete: String,
-    text: String,
-    prop: String
-  },
-  emits: ["update:text"],
-  data() {
-    return {
-      input: ""
-    }
-  },
   methods: {
-    updateText(val) {
-      this.$emit('update:text', val)
-    },
     focus() {
       this.$refs.rawInput.focus();
     }

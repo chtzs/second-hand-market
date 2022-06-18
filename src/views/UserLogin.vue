@@ -13,7 +13,8 @@
         <h3 class="title">八路军管理系统</h3>
       </div>
 
-      <MyInput ref="username" v-model:text="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1"
+      <MyInput ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
+               tabindex="1"
                auto-complete="on">
         <template v-slot:prefix>
           <el-icon>
@@ -22,7 +23,7 @@
         </template>
       </MyInput>
 
-      <MyInput ref="password" v-model:text="loginForm.password" placeholder="Password"
+      <MyInput ref="password" v-model="loginForm.password" placeholder="Password"
                name="password" tabindex="2" auto-complete="on" prop="password"
                :type="passwordType">
         <template v-slot:prefix>
@@ -40,7 +41,7 @@
         </template>
       </MyInput>
       <div>
-        <el-button type="primary" style="width:100%;margin-bottom:20px;">登录</el-button>
+        <el-button type="primary" @click="login" style="width:100%;margin-bottom:20px;">登录</el-button>
       </div>
       <div class="tips">
           <span style="margin-right:20px;">如果您还没有账号请先 <span style="color:#409EFF;cursor:pointer"
@@ -94,11 +95,15 @@ export default {
         this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
+        this.$refs.password.focus();
       })
     },
-    register(){
+    register() {
       this.$router.push('/register');
+    },
+    login() {
+      console.log(this.loginForm.username);
+      console.log(this.loginForm.password);
     }
   }
 }
