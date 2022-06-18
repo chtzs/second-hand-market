@@ -3,7 +3,7 @@
     <span class="prefix">
       <slot name="prefix"></slot>
     </span>
-    <el-input ref="username" :placeholder="placeholder" :name="name" :type="type"
+    <el-input ref="rawInput" :placeholder="placeholder" :name="name" :type="type"
               :tabindex="tabindex" :auto-complete="autoComplete" :prop="prop"
               :model-value="text"
               @input="updateText"
@@ -15,11 +15,9 @@
 </template>
 
 <script>
-import {ElInput} from "element-plus";
 
 export default {
   name: "MyInput",
-  extends: ElInput,
   props: {
     placeholder: String,
     name: String,
@@ -38,6 +36,9 @@ export default {
   methods: {
     updateText(val) {
       this.$emit('update:text', val)
+    },
+    focus() {
+      this.$refs.rawInput.focus();
     }
   }
 }

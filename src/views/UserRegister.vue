@@ -1,40 +1,55 @@
 <template>
   <el-form ref="form" class="form" auto-complete="on"
            label-position="left">
+    <div class="title-container">
+      <h3 class="title">注册成为八路军！</h3>
+    </div>
     <MyInput v-model:text="text" placeholder="Username" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Avatar/>
         </el-icon>
       </template>
-      <template v-slot:suffix>
+    </MyInput>
+    <MyInput v-model:text="text" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
+      <template v-slot:prefix>
         <el-icon>
-          <Avatar/>
+          <Phone/>
         </el-icon>
       </template>
     </MyInput>
-    <MyInput v-model:text="text" placeholder="Password" type="password" tabindex="1" auto-complete="on">
+    <MyInput ref="password" v-model:text="registerForm.password" placeholder="Password"
+             name="password" tabindex="3" auto-complete="on" prop="password"
+             :type="passwordType">
       <template v-slot:prefix>
         <el-icon>
-          <Avatar/>
+          <Lock/>
         </el-icon>
       </template>
       <template v-slot:suffix>
-        <el-icon>
-          <Avatar/>
-        </el-icon>
+          <span @click="showPwd">
+            <el-icon>
+              <Bell v-if="passwordType === 'password'"/>
+              <BellFilled v-if="passwordType !== 'password'"/>
+            </el-icon>
+          </span>
       </template>
     </MyInput>
-    <MyInput v-model:text="text" placeholder="Confirm password" type="password" tabindex="1" auto-complete="on">
+    <MyInput ref="password" v-model:text="registerForm.confirmPassword" placeholder="Confirm password"
+             name="password" tabindex="4" auto-complete="on" prop="password"
+             :type="passwordType">
       <template v-slot:prefix>
         <el-icon>
-          <Avatar/>
+          <Lock/>
         </el-icon>
       </template>
       <template v-slot:suffix>
-        <el-icon>
-          <Avatar/>
-        </el-icon>
+          <span @click="showPwd">
+            <el-icon>
+              <Bell v-if="passwordType === 'password'"/>
+              <BellFilled v-if="passwordType !== 'password'"/>
+            </el-icon>
+          </span>
       </template>
     </MyInput>
     <input v-model="text">
@@ -45,7 +60,7 @@
 <script setup>
 import MyInput from "@/components/MyInput";
 // eslint-disable-next-line no-unused-vars
-import {Avatar, Lock, Bell, BellFilled} from '@element-plus/icons-vue';
+import {Avatar, Lock, Bell, BellFilled, Phone} from '@element-plus/icons-vue';
 </script>
 
 <script>
@@ -53,17 +68,28 @@ export default {
   name: "UserRegister",
   data() {
     return {
-      // 头像状态
-      TxStatus: true,
       registerForm: {
         username: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
       },
       loading: false,
       passwordType: 'password',
       redirect: undefined,
       text: ""
     }
+  },
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
   }
 }
 </script>
@@ -73,6 +99,8 @@ export default {
 </style>
 
 <style lang="scss">
+$light_gray: #fff;
+
 .form {
   position: relative;
   width: 520px;
@@ -80,5 +108,18 @@ export default {
   padding: 160px 35px 0;
   margin: 0 auto;
   overflow: hidden;
+}
+
+.title-container {
+  position: relative;
+
+  .title {
+    font-size: 30px;
+    color: $light_gray;
+    margin: 0 auto 40px auto;
+    text-align: center;
+    font-weight: 500;
+    -webkit-text-stroke: 1px black;
+  }
 }
 </style>
