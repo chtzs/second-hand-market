@@ -4,21 +4,21 @@
     <div class="title-container">
       <h3 class="title">注册成为八路军！</h3>
     </div>
-    <MyInput v-model:text="text" placeholder="Username" type="text" tabindex="1" auto-complete="on">
+    <MyInput v-model="text" placeholder="Username" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Avatar/>
         </el-icon>
       </template>
     </MyInput>
-    <MyInput v-model:text="text" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
+    <MyInput v-model="text" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Phone/>
         </el-icon>
       </template>
     </MyInput>
-    <MyInput ref="password" v-model:text="registerForm.password" placeholder="Password"
+    <MyInput ref="password" v-model="registerForm.password" placeholder="Password"
              name="password" tabindex="3" auto-complete="on" prop="password"
              :type="passwordType">
       <template v-slot:prefix>
@@ -35,7 +35,7 @@
           </span>
       </template>
     </MyInput>
-    <MyInput ref="password" v-model:text="registerForm.confirmPassword" placeholder="Confirm password"
+    <MyInput ref="password" v-model="registerForm.confirmPassword" placeholder="Confirm password"
              name="password" tabindex="4" auto-complete="on" prop="password"
              :type="passwordType">
       <template v-slot:prefix>
