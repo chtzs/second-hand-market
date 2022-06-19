@@ -9,6 +9,11 @@ const routes = [
         path: '/register',
         component: () => import('@/views/UserRegister')
     },
+    {
+        name: 'details',
+        path: '/goods/details',
+        component: () => import('@/views/GoodsDetails')
+    }
 ];
 
 export default routes

@@ -5,9 +5,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
              label-position="left">
       <!-- 头像区域 -->
-      <div v-if="TxStatus" class="avatar-box">
-        <img src="@/assets/me.png" alt="">
-      </div>
+      <my-avatar :src="require('@/assets/me.png')"/>
 
       <div class="title-container">
         <h3 class="title">八路军管理系统</h3>
@@ -54,6 +52,7 @@
 <script setup>
 import MyInput from "@/components/MyInput";
 import {Avatar, Lock, Bell, BellFilled} from '@element-plus/icons-vue';
+import MyAvatar from "@/components/MyAvatar";
 </script>
 
 <script>
