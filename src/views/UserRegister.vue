@@ -11,7 +11,8 @@
         </el-icon>
       </template>
     </MyInput>
-    <MyInput v-model="text" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
+    <el-slider v-model="registerForm.phoneNumber" :min="phoneMin" :max="phoneMax" :format-tooltip="format"/>
+    <MyInput :model-value="format(registerForm.phoneNumber)" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Phone/>
@@ -70,13 +71,16 @@ export default {
     return {
       registerForm: {
         username: '',
+        phoneNumber: 0,
         password: '',
         confirmPassword: ''
       },
       loading: false,
       passwordType: 'password',
       redirect: undefined,
-      text: ""
+      text: "",
+      phoneMin: 0,
+      phoneMax: 100000
     }
   },
   methods: {
@@ -90,6 +94,16 @@ export default {
         this.$refs.password.focus()
       })
     },
+    format(value) {
+      // - (x - (a + b) / 2)
+      if (value === 0) return 10000000000;
+      else if(value === this.phoneMax) return 99999999999;
+      let pMin = 100000;
+      let pMax = 999999;
+      let prefix = Math.floor(value * (pMax - pMin) / this.phoneMax + pMin);
+      let suffix = pMin + pMax - prefix;
+      return parseInt((prefix * pMin + suffix).toString());
+    }
   }
 }
 </script>
