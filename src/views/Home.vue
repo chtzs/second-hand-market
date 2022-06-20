@@ -24,13 +24,17 @@
               :src="goods.image"
               class="image"
               :alt="goods.name"/>
-          <el-row class="title">
+          <el-row>
             <el-col :span="4" class="condition">
               <div>{{ goods.goodsCondition }}</div>
             </el-col>
             <el-col :span="20" class="description">
               <span>{{ goods.description.substring(0, Math.min(goods.description.length, 20)) }}</span>
             </el-col>
+          </el-row>
+          <el-row class="money-want-wrapper">
+            <span class="money">￥{{ goods.actualPrice }}</span>
+            <span class="want">{{ goods.wantedCount }}人想要</span>
           </el-row>
           <div style="padding: 14px">
             <span>{{ goods.name }}</span>
@@ -115,22 +119,12 @@ export default {
 }
 
 .goods-item {
-  //display: flex;
-  //justify-content: center;
-  //justify-items: center;
-  //padding: 0;
-  //height: 200px;
-  //width: 100%;
-  //background-color: #42b983;
   margin: 20px 0;
 
   .image {
     width: 100%;
     display: block;
   }
-}
-
-.title {
 }
 
 .condition {
@@ -162,5 +156,24 @@ export default {
     white-space: nowrap;
     margin: 5px;
   }
+}
+
+.money-want-wrapper {
+  display: flex;
+  align-items: baseline;
+  * {
+    margin: 0 5px;
+  }
+}
+
+.money {
+  color: red;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.want {
+  color: gray;
+  font-size: 1em;
 }
 </style>
