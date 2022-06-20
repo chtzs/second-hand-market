@@ -2,7 +2,7 @@
   <el-affix>
     <el-row class="nav-bar">
       <el-col :span="4">
-        <el-row class="content" justify="start" align="center">
+        <el-row class="content" justify="start">
           <div class="logo">
             <img alt="Avatar" src="@/assets/logo.png">
           </div>
@@ -10,7 +10,7 @@
         </el-row>
       </el-col>
       <el-col :span="20">
-        <el-row class="content" justify="end" align="center">
+        <el-row class="content" justify="end">
           <el-link v-if="!login" :href="loginUrl">登录</el-link>
           <el-link v-if="!login" :href="registerUrl">注册</el-link>
           <el-link v-if="login" :href="userCenter">个人中心</el-link>

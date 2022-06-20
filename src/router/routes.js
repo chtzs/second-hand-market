@@ -1,9 +1,9 @@
-import LoginPage from "@/views/LoginPage";
+import LoginPage from "@/views/pages/LoginPage";
+import HomePage from "@/views/pages/HomePage";
 
 const routes = [
     {
         name: 'loginPage',
-        path: '/',
         component: LoginPage,
         children: [
             {
@@ -19,9 +19,20 @@ const routes = [
         ]
     },
     {
-        name: 'details',
-        path: '/goods/details',
-        component: () => import('@/views/GoodsDetails')
+        name: 'homePage',
+        component: HomePage,
+        children: [
+            {
+                name: 'home',
+                path: '/home',
+                component: () => import('@/views/Home')
+            },
+            {
+                name: 'details',
+                path: '/goods/details',
+                component: () => import('@/views/GoodsDetails')
+            }
+        ]
     }
 ];
 

@@ -42,7 +42,7 @@
 
       <!-- 右侧内容区 -->
       <div class="content">
-        <h1 class="name">{{ productDetails.productName }}</h1>
+        <h1 class="description">{{ productDetails.productName }}</h1>
         <p class="intro">{{ productDetails.productIntro }}</p>
         <p class="store">小米自营</p>
         <div class="price">
@@ -249,7 +249,7 @@ export default {
   width: 640px;
 }
 
-#details .main .content .name {
+#details .main .content .description {
   height: 30px;
   line-height: 30px;
   font-size: 24px;
