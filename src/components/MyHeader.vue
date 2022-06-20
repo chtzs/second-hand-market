@@ -6,13 +6,13 @@
           <div class="logo">
             <img alt="Avatar" src="@/assets/logo.png">
           </div>
-          <el-link :href="loginUrl">首页</el-link>
+          <el-link :href="homeUrl">首页</el-link>
         </el-row>
       </el-col>
       <el-col :span="20">
         <el-row class="content" justify="end" align="center">
           <el-link v-if="!login" :href="loginUrl">登录</el-link>
-          <el-link v-if="!login" :href="register">注册</el-link>
+          <el-link v-if="!login" :href="registerUrl">注册</el-link>
           <el-link v-if="login" :href="userCenter">个人中心</el-link>
         </el-row>
       </el-col>
@@ -24,8 +24,9 @@
 export default {
   name: "MyHeader",
   props: {
+    homeUrl: String,
     loginUrl: String,
-    register: String,
+    registerUrl: String,
     userCenter: String
   },
   data() {

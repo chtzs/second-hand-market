@@ -7,7 +7,7 @@ import md5 from 'js-md5';
 import axios from "axios";
 
 let app = createApp(App);
-app.config.globalProperties.$target = "http://localhost:8081/"; // 本地后端地址
+app.config.globalProperties.$target = "http://localhost:8080/"; // 本地后端地址
 app.config.globalProperties.$md5 = md5;
 app.config.globalProperties.$axios = axios;
 // 封装提示成功的弹出框

@@ -1,20 +1,11 @@
 <template>
-  <div class="container">
-    <MyHeader></MyHeader>
-    <!--  <img alt="Vue logo" src="./assets/logo.png">-->
-    <router-view></router-view>
-    <MyFooter class="app-footer"></MyFooter>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
 
-import MyHeader from "@/components/MyHeader";
-import MyFooter from "@/components/MyFooter";
-
 export default {
-  name: 'App',
-  components: {MyFooter, MyHeader}
+  name: 'App'
 }
 </script>
 
@@ -33,15 +24,10 @@ html, body, #app {
   margin: 0;
 }
 
-.app-footer {
-  margin-top: 20px;
-}
-
 .container {
   width: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 </style>

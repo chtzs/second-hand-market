@@ -1,13 +1,22 @@
+import LoginPage from "@/views/LoginPage";
+
 const routes = [
     {
-        name: 'login',
-        path: '/login',
-        component: () => import('@/views/UserLogin')
-    },
-    {
-        name: 'register',
-        path: '/register',
-        component: () => import('@/views/UserRegister')
+        name: 'loginPage',
+        path: '/',
+        component: LoginPage,
+        children: [
+            {
+                name: 'login',
+                path: '/login',
+                component: () => import('@/views/UserLogin')
+            },
+            {
+                name: 'register',
+                path: '/register',
+                component: () => import('@/views/UserRegister')
+            },
+        ]
     },
     {
         name: 'details',
