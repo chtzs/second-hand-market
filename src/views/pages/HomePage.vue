@@ -17,6 +17,7 @@ import SearchBar from "@/components/SearchBar";
 
 export default {
   name: "HomePage",
+  // eslint-disable-next-line vue/no-unused-components
   components: {MyFooter, MyHeader, SearchBar},
   methods: {
     search() {
@@ -32,9 +33,14 @@ export default {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  //background-color: #42b983;
 }
 
 .content {
+  min-height: 100vh;
   padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  //background-color: #99a9bf;
 }
 </style>
