@@ -101,8 +101,18 @@ export default {
       this.$router.push('/register');
     },
     login() {
-      console.log(this.loginForm.username);
-      console.log(this.loginForm.password);
+      this.$axios.get('user/login', {
+            params: {
+              phoneNumber: this.loginForm.username,
+              password: this.loginForm.password
+            }
+          }
+      ).then((data) => {
+        this.notifySucceed(data.msg);
+        this.$cookie.set('token', data.token);
+        this.$router.push('/home');
+      }).catch(() => {
+      });
     }
   }
 }

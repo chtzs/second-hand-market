@@ -4,15 +4,24 @@
     <div class="title-container">
       <h3 class="title">注册成为八路军！</h3>
     </div>
-    <MyInput v-model="text" placeholder="Username" type="text" tabindex="1" auto-complete="on">
+    <MyInput v-model="registerForm.nickname" placeholder="Nickname" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Avatar/>
         </el-icon>
       </template>
     </MyInput>
-    <el-slider v-model="registerForm.phoneNumber" :min="phoneMin" :max="phoneMax" :format-tooltip="format"/>
-    <MyInput :model-value="format(registerForm.phoneNumber)" placeholder="PhoneNumber" type="text" tabindex="1" auto-complete="on">
+    <el-slider v-model="registerForm.progress" :min="phoneMin" :max="phoneMax" :format-tooltip="format"/>
+    <MyInput :model-value="format(registerForm.progress)" placeholder="PhoneNumber" type="text" tabindex="1"
+             auto-complete="on">
+      <template v-slot:prefix>
+        <el-icon>
+          <Phone/>
+        </el-icon>
+      </template>
+    </MyInput>
+    <MyInput v-model="registerForm.phoneNumber" placeholder="PhoneNumber" type="text" tabindex="1"
+             auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
           <Phone/>
@@ -53,7 +62,7 @@
           </span>
       </template>
     </MyInput>
-    <input v-model="text">
+    <el-button type="success" style="width: 100%;" @click="register">注册！</el-button>
   </el-form>
 
 </template>
@@ -70,7 +79,8 @@ export default {
   data() {
     return {
       registerForm: {
-        username: '',
+        nickname: '',
+        progress: 0,
         phoneNumber: 0,
         password: '',
         confirmPassword: ''
@@ -97,12 +107,29 @@ export default {
     format(value) {
       // - (x - (a + b) / 2)
       if (value === 0) return 10000000000;
-      else if(value === this.phoneMax) return 99999999999;
+      else if (value === this.phoneMax) return 99999999999;
       let pMin = 100000;
       let pMax = 999999;
       let prefix = Math.floor(value * (pMax - pMin) / this.phoneMax + pMin);
       let suffix = pMin + pMax - prefix;
       return parseInt((prefix * pMin + suffix).toString());
+    },
+    register() {
+      if (this.registerForm.password !== this.registerForm.confirmPassword) {
+        this.notifyError("两次密码不一致");
+        return;
+      }
+      this.$axios.get('user/register', {
+        params: {
+          nickname: this.registerForm.nickname,
+          phoneNumber: this.registerForm.phoneNumber,
+          password: this.registerForm.password
+        }
+      }).then((data) => {
+        this.notifySucceed(data.msg);
+        this.$router.push('/login');
+      }).catch(() => {
+      });
     }
   }
 }
