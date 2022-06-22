@@ -1,7 +1,15 @@
 <template>
   <el-backtop :right="50" :bottom="100"/>
   <div class="container">
-    <my-header></my-header>
+    <my-header>
+      <template v-slot:right>
+        <div class="link-list">
+          <el-link v-if="!login" :href="loginUrl">登录</el-link>
+          <el-link v-if="!login" :href="registerUrl">注册</el-link>
+          <el-link v-if="login" :href="userCenter">个人中心</el-link>
+        </div>
+      </template>
+    </my-header>
     <div class="content">
       <search-bar @on-search="search"></search-bar>
       <router-view></router-view>
@@ -19,6 +27,14 @@ export default {
   name: "HomePage",
   // eslint-disable-next-line vue/no-unused-components
   components: {MyFooter, MyHeader, SearchBar},
+  data() {
+    return {
+      loginUrl: "",
+      registerUrl: "",
+      userCenter: "",
+      login: false
+    }
+  },
   methods: {
     search() {
 
@@ -28,6 +44,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$content-child-margin: 10px;
+
 .container {
   width: 100%;
   min-height: 100%;
@@ -42,5 +60,12 @@ export default {
   display: flex;
   flex-direction: column;
   //background-color: #99a9bf;
+}
+
+.link-list {
+  * {
+    margin: 0 $content-child-margin;
+    height: 100%;
+  }
 }
 </style>

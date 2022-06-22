@@ -1,5 +1,6 @@
 import LoginPage from "@/views/pages/LoginPage";
 import HomePage from "@/views/pages/HomePage";
+import AdminPage from "@/views/pages/AdminPage";
 
 const routes = [
     {
@@ -36,6 +37,17 @@ const routes = [
                 name: 'order',
                 path: '/goods/order',
                 component: () => import('@/views/GoodsOrder')
+            }
+        ]
+    },
+    {
+        name: 'adminPage',
+        component: AdminPage,
+        children: [
+            {
+                name: 'userManagement',
+                path: '/user/management',
+                component: () => import('@/views/admin/UserManagement')
             }
         ]
     }

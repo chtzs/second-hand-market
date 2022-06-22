@@ -11,9 +11,7 @@
       </el-col>
       <el-col :span="20">
         <el-row class="content" justify="end">
-          <el-link v-if="!login" :href="loginUrl">登录</el-link>
-          <el-link v-if="!login" :href="registerUrl">注册</el-link>
-          <el-link v-if="login" :href="userCenter">个人中心</el-link>
+          <slot name="right"/>
         </el-row>
       </el-col>
     </el-row>
@@ -24,15 +22,7 @@
 export default {
   name: "MyHeader",
   props: {
-    homeUrl: String,
-    loginUrl: String,
-    registerUrl: String,
-    userCenter: String
-  },
-  data() {
-    return {
-      login: false
-    }
+    homeUrl: String
   },
   methods: {
     setLogin(login) {
@@ -55,10 +45,6 @@ $content-child-margin: 10px;
 
 .content {
   height: 100%;
-
-  * {
-    margin: 0 $content-child-margin;
-  }
 }
 
 .logo {
