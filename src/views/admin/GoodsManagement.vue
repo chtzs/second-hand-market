@@ -1,23 +1,21 @@
 <template>
-  <data-table-template show-detail-text="用户详情"
-                       detail-title="用户详情"
+  <data-table-template show-detail-text="商品详情"
+                       detail-title="商品详情"
                        delete-text="删除"
                        confirm-delete-title="删除确认"
                        :current="page.current"
                        :total="page.total"
                        :size="page.size"
-                       :data-type="user"
+                       :data-type="goods"
                        :table-data="tableData"
                        :disable-list="disableList"
                        @handleCurrentChange="handleCurrentChange"
-                       @updateItem="updateUser"
-                       @deleteItem="deleteUser">
-
+                       @updateItem="updateItem"
+                       @deleteItem="deleteItem">
     <template #updateItem="scope">
       <el-form-item :label="scope.label" :label-width="scope.labelWidth">
         <el-input :disabled="scope.disabled" v-model="scope.updateData[scope.item]" autocomplete="off"/>
       </el-form-item>
-      <el-image v-if="scope.item === 'avatar'" style="width: 100px; height: 100px" src="/img/me.png" fit="contain"/>
     </template>
   </data-table-template>
 </template>
@@ -26,29 +24,32 @@
 import DataTableTemplate from "@/views/admin/DataTableTemplate";
 
 export default {
-  name: "UserManagement",
+  name: "GoodsManagement",
   components: {DataTableTemplate},
   data() {
     return {
       tableData: [],
-      user: {
-        id: "用户id",
-        phoneNumber: "手机号",
-        nickname: "昵称",
-        password: "密码",
-        salt: "盐",
-        avatar: "头像",
-        gender: "性别",
-        identity: "身份",
-        registerDate: "注册时间"
+      goods: {
+        id: "ID",
+        sellerId: "卖家id",
+        name: "商品名称",
+        image: "商品图片",
+        description: "描述",
+        fakePrice: "假价格",
+        actualPrice: "真价格",
+        functionality: "功能性",
+        goodsCondition: "成色",
+        postDate: "发布日期",
+        viewCount: "浏览次数",
+        wantedCount: "想要次数",
+        status: "状态"
       },
-      disableList: ['id', 'registerDate'],
+      disableList: ['id', 'sellerId', 'postDate'],
       page: {
         total: 0,
         current: 1,
         size: 10
-      },
-      searchContent: ""
+      }
     }
   },
   created() {
@@ -61,7 +62,7 @@ export default {
     },
 
     load() {
-      this.$axios.get("user/list",
+      this.$axios.get("goods/list",
           {
             params: {
               current: this.page.current,
@@ -73,9 +74,10 @@ export default {
       });
     },
 
-    updateUser(newItem) {
-      this.$axios.post("user/admin/update", {
-        user: newItem
+    updateItem(newItem) {
+      console.log(newItem)
+      this.$axios.post("goods/admin/update", {
+        goods: newItem
       }).then((res) => {
         this.notifySucceed(res.msg);
         this.load();
@@ -83,10 +85,11 @@ export default {
       }).catch();
     },
 
-    deleteUser(newItem) {
-      this.$axios.get("user/admin/delete", {
+    deleteItem(newItem) {
+      console.log(newItem.id);
+      this.$axios.get("goods/admin/delete", {
         params: {
-          userId: newItem.id
+          goodsId: newItem.id
         }
       }).then((res) => {
         this.notifySucceed(res.msg);
@@ -98,12 +101,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.ellipsis {
-  .cell {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-}
+<style scoped>
+
 </style>

@@ -1,9 +1,8 @@
 <template>
   <el-main>
     <el-row>
-      <el-table :data="myTableData" stripe style="width: 100%">
-        <slot name="table"/>
-        <el-table-column label="操作">
+      <el-table :data="tableData" stripe style="width: 100%">
+        <el-table-column label="操作" style="width: 100%; min-width: 200px">
           <template #default="scope">
             <el-button size="small" @click="showDetail(scope.$index, scope.row)">{{ showDetailText }}</el-button>
             <el-button
@@ -14,6 +13,9 @@
             </el-button>
           </template>
         </el-table-column>
+        <el-table-column v-for="item in Object.keys(dataType)" :key="item" :prop="item" :label="dataType[item]"
+                         :width="cellWidth(item)"
+                         :class-name="isEllipsis(item) ? 'ellipsis' : ''"/>
       </el-table>
     </el-row>
   </el-main>
@@ -30,8 +32,16 @@
   </el-footer>
 
   <el-dialog v-model="dialogTableVisible" :title="detailTitle">
-    <el-form :model="myUpdateData">
-      <slot name="update"/>
+    <el-form :model="updateData">
+      <slot v-for="item in Object.keys(dataType)" :key="item"
+            name="updateItem"
+            :item="item"
+            :label="dataType[item]"
+            :label-width="labelWidth(item)"
+            :disabled="disableList.includes(item)"
+            :data="updateData[item]"
+            :updateData="updateData">
+      </slot>
       <el-row justify="end">
         <el-button type="danger" style="margin-left: 10px;" @click="this.dialogTableVisible = false">取消</el-button>
         <el-button type="success" @click="updateItem">更新</el-button>
@@ -64,14 +74,27 @@ export default {
     current: Number,
     total: Number,
     size: Number,
+    dataType: Object,
     tableData: Array,
-    updateData: Object
+    cellWidth: {
+      type: Function,
+      default: () => 120
+    },
+    isEllipsis: {
+      type: Function,
+      default: () => true
+    },
+    labelWidth: {
+      type: Function,
+      default: () => 120
+    },
+    disableList: Array
   },
-  emits: ["showDetail", "deleteItem", "handleCurrentChange", "confirmDelete", "updateItem"],
+  emits: ["showDetail", "deleteItem", "handleCurrentChange", "updateItem"],
   data() {
     return {
       myTableData: [],
-      myUpdateData: {},
+      updateData: {},
       dialogTableVisible: false,
       deleteDialogVisible: false,
       page: {
@@ -83,24 +106,26 @@ export default {
   },
   methods: {
     showDetail(index, row) {
-      this.myUpdateData = row;
+      this.updateData = JSON.parse(JSON.stringify(row));
       this.dialogTableVisible = true;
       this.$emit("showDetail", index, row);
     },
     showDeleteDialog(index, row) {
+      this.updateData = JSON.parse(JSON.stringify(row));
       this.deleteDialogVisible = true;
-      this.$emit("deleteItem", index, row);
+      this.$emit("confirmDelete", index, row);
     },
     handleCurrentChange(pageNum) {
       this.$emit("handleCurrentChange", pageNum);
     },
-    updateItem(newItem) {
+    updateItem() {
       this.dialogTableVisible = false;
-      this.$emit("updateItem", newItem);
+      this.$emit("updateItem", this.updateData);
     },
     deleteItem() {
+      console.log(this.updateData);
       this.deleteDialogVisible = false;
-      this.$emit("confirmDelete");
+      this.$emit("deleteItem", this.updateData);
     },
   },
   watch: {
@@ -115,14 +140,17 @@ export default {
     },
     tableData(newValue) {
       this.myTableData = newValue;
-    },
-    updateData(newValue) {
-      this.myUpdateData = newValue;
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.ellipsis {
+  .cell {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
 </style>

@@ -48,6 +48,11 @@ const routes = [
                 name: 'userManagement',
                 path: '/management/user',
                 component: () => import('@/views/admin/UserManagement')
+            },
+            {
+                name: 'goodsManagement',
+                path: '/management/goods',
+                component: () => import('@/views/admin/GoodsManagement')
             }
         ]
     }
