@@ -17,6 +17,7 @@
             <el-button
                 size="small"
                 type="danger"
+                @click="deleteUser(scope.row)"
             >删除
             </el-button>
           </template>
@@ -72,6 +73,19 @@
       </el-row>
     </el-form>
   </el-dialog>
+  <el-dialog
+      v-model="deleteDialogVisible"
+      title="删除确认"
+      width="30%"
+  >
+    <span>你确定？</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="deleteDialogVisible = false">还是算了吧</el-button>
+        <el-button type="primary" @click="confirmDelete">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -88,7 +102,8 @@ export default {
       form: {},
       searchContent: "",
       labelWidth: "100px",
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      deleteDialogVisible: false
     }
   },
   created() {
@@ -127,13 +142,30 @@ export default {
     },
 
     update() {
-      this.$axios.post("user/admin/update", JSON.stringify({
+      this.$axios.post("user/admin/update", {
         user: this.form
-      })).then((res) => {
+      }).then((res) => {
         this.notifySucceed(res.msg);
         this.load();
         this.dialogTableVisible = false;
       }).catch();
+    },
+
+    deleteUser(row) {
+      this.deleteDialogVisible = true;
+      this.form = row;
+    },
+
+    confirmDelete() {
+      this.$axios.get("user/admin/delete", {
+        params: {
+          userId: this.form.id
+        }
+      }).then((res) => {
+        this.notifySucceed(res.msg);
+        this.load();
+      }).catch();
+      this.deleteDialogVisible = false;
     }
   }
 }
