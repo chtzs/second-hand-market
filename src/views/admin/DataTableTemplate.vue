@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <el-row>
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="myTableData" stripe style="width: 100%">
         <slot name="table"/>
         <el-table-column label="操作">
           <template #default="scope">
@@ -9,8 +9,8 @@
             <el-button
                 size="small"
                 type="danger"
-                @click="deleteItem(scope.$index, scope.row)"
-            >{{deleteText}}
+                @click="showDeleteDialog(scope.$index, scope.row)"
+            >{{ deleteText }}
             </el-button>
           </template>
         </el-table-column>
@@ -23,14 +23,14 @@
       <el-pagination background layout="prev, pager, next"
                      v-bind:currentPage="page.current"
                      :total="page.total"
-                     @current-change="handleCurrentChange"
                      :page-size="page.size"
+                     @current-change="handleCurrentChange"
       />
     </el-row>
   </el-footer>
 
   <el-dialog v-model="dialogTableVisible" :title="detailTitle">
-    <el-form :model="form">
+    <el-form :model="myUpdateData">
       <slot name="update"/>
       <el-row justify="end">
         <el-button type="danger" style="margin-left: 10px;" @click="this.dialogTableVisible = false">取消</el-button>
@@ -47,7 +47,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="deleteDialogVisible = false">还是算了吧</el-button>
-        <el-button type="primary" @click="confirmDelete">确定</el-button>
+        <el-button type="primary" @click="deleteItem">确定</el-button>
       </span>
     </template>
   </el-dialog>
@@ -61,36 +61,63 @@ export default {
     detailTitle: String,
     deleteText: String,
     confirmDeleteTitle: String,
-    page: {
-      current: Number,
-      total: Number,
-      size: Number
-    }
+    current: Number,
+    total: Number,
+    size: Number,
+    tableData: Array,
+    updateData: Object
   },
   emits: ["showDetail", "deleteItem", "handleCurrentChange", "confirmDelete", "updateItem"],
   data() {
     return {
-      tableData: [],
-      form: {},
+      myTableData: [],
+      myUpdateData: {},
       dialogTableVisible: false,
-      deleteDialogVisible: false
+      deleteDialogVisible: false,
+      page: {
+        current: 1,
+        total: 0,
+        size: 10
+      }
     }
   },
   methods: {
     showDetail(index, row) {
+      this.myUpdateData = row;
+      this.dialogTableVisible = true;
       this.$emit("showDetail", index, row);
     },
-    deleteItem(index, row) {
+    showDeleteDialog(index, row) {
+      this.deleteDialogVisible = true;
       this.$emit("deleteItem", index, row);
     },
-    handleCurrentChange() {
-      this.$emit("handleCurrentChange");
+    handleCurrentChange(pageNum) {
+      this.$emit("handleCurrentChange", pageNum);
     },
-    confirmDelete() {
+    updateItem(newItem) {
+      this.dialogTableVisible = false;
+      this.$emit("updateItem", newItem);
+    },
+    deleteItem() {
+      this.deleteDialogVisible = false;
       this.$emit("confirmDelete");
     },
-    updateItem() {
-      this.$emit("updateItem");
+  },
+  watch: {
+    current(newValue) {
+      this.page.current = newValue;
+    },
+    total(newValue) {
+      this.page.total = newValue;
+    },
+    size(newValue) {
+      this.page.size = newValue;
+    },
+    tableData(newValue) {
+      this.myTableData = newValue;
+    },
+    updateData(newValue) {
+      this.myUpdateData = newValue;
     }
   }
 }

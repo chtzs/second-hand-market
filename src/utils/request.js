@@ -22,7 +22,6 @@ let wrapper = function (vueApp) {
 
     request.interceptors.response.use(res => {
         const data = res.data;
-        console.log(data);
         if (data.code === 200) {
             return Promise.resolve(data);
         } else {
