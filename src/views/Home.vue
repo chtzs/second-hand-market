@@ -1,51 +1,55 @@
 <template>
-  <h1>Hello!</h1>
-  <el-row justify="space-between">
-    <el-col :span="12">
-      <h1>今日推荐</h1>
-      <el-image :src="randomImage"/>
-    </el-col>
-    <el-col :span="10">
-      <h1>一些消息</h1>
-      <div class="info">
-        <my-avatar :src="require('@/assets/me.png')"/>
-        <my-avatar :src="require('@/assets/me.png')"/>
-        <my-avatar :src="require('@/assets/me.png')"/>
-      </div>
-    </el-col>
-  </el-row>
-  <div class="goods-list">
-    <h1>热门二手产品</h1>
-    <el-row :gutter="20">
-      <el-col v-for="goods in goodsList" :key="goods.id" :span="6">
-        <el-card shadow="hover" class="goods-item" :body-style="{ padding: '0px' }">
-          <!--            <p>{{ goods.name }}</p>-->
-          <img
-              :src="goods.image"
-              class="image"
-              :alt="goods.name"/>
-          <el-row>
-            <el-col :span="4" class="condition">
-              <div>{{ goods.goodsCondition }}</div>
-            </el-col>
-            <el-col :span="20" class="description">
-              <span>{{ goods.description.substring(0, Math.min(goods.description.length, 20)) }}</span>
-            </el-col>
-          </el-row>
-          <el-row class="money-want-wrapper">
-            <span class="money">￥{{ goods.actualPrice }}</span>
-            <span class="want">{{ goods.wantedCount }}人想要</span>
-          </el-row>
-          <div style="padding: 14px">
-            <span>{{ goods.name }}</span>
-            <div class="bottom">
-              <time class="time">{{ goods.postDate }}</time>
-              <el-button text class="button">Operating</el-button>
-            </div>
-          </div>
-        </el-card>
+  <div v-infinite-scroll="addData">
+    <h1>Hello!</h1>
+    <el-row justify="space-between">
+      <el-col :span="12">
+        <h1>今日推荐</h1>
+        <el-image :src="randomImage"/>
+      </el-col>
+      <el-col :span="10">
+        <h1>一些消息</h1>
+        <div class="info">
+          <my-avatar :src="require('@/assets/me.png')"/>
+          <my-avatar :src="require('@/assets/me.png')"/>
+          <my-avatar :src="require('@/assets/me.png')"/>
+        </div>
       </el-col>
     </el-row>
+    <div class="goods-list">
+      <h1>热门二手产品</h1>
+      <el-row :gutter="20">
+        <el-col v-for="goods in goodsList" :key="goods.id" :span="6">
+          <el-card shadow="hover" class="goods-item" :body-style="{ padding: '0px' }">
+            <!--            <p>{{ goods.name }}</p>-->
+            <img
+                :src="goods.image"
+                class="image"
+                :alt="goods.name"/>
+            <el-row>
+              <el-col :span="4" class="condition">
+                <div>{{ goods.goodsCondition }}</div>
+              </el-col>
+              <el-col :span="20" class="description">
+                <span>{{ goods.description.substring(0, Math.min(goods.description.length, 20)) }}</span>
+              </el-col>
+            </el-row>
+            <el-row class="money-want-wrapper">
+              <span class="money">￥{{ goods.actualPrice }}</span>
+              <span class="want">{{ goods.wantedCount }}人想要</span>
+            </el-row>
+            <div style="padding: 14px">
+              <span>{{ goods.name }}</span>
+              <el-row justify="space-between">
+                <div class="time">
+                  <span>发布日期:{{ this.$dateFormat(new Date(goods.postDate), 'yyyy-MM-dd')}}</span>
+                </div>
+                <el-button type="success" class="button">让我看看</el-button>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -58,49 +62,35 @@ export default {
   components: {MyAvatar},
   data() {
     return {
-      goodsList: [
-        {
-          id: 0,
-          sellerId: 0,
-          name: "汉堡",
-          description: "蟹堡王的汉堡，十分地珍贵",
-          image: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          fakePrice: 100,
-          actualPrice: 0,
-          functionality: "Good",
-          goodsCondition: "全新",
-          postDate: new Date(),
-          viewCount: 0,
-          wantedCount: 0
-        }
-      ],
+      page: {
+        total: 0,
+        current: 1,
+        size: 10
+      },
+      goodsList: [],
       randomImage: "https://www.apple.com.cn/v/macbook-pro-13/m/images/overview/hero_endframe__bsza6x4fldiq_large_2x.jpg"
     }
   },
   created() {
-    this.addData();
+    this.load();
   },
   methods: {
-    addData() {
-      for (let i = 1; i < 10; i++) {
-        this.goodsList.push(
-            {
-              id: i,
-              sellerId: 0,
-              name: "Apple" + i,
-              description: "库克亲自送达",
-              image: "https://www.apple.com.cn/v/macbook-pro-13/m/images/overview/modal/m2_power__ez08wn3y6qoi_medium_2x.jpg",
-              fakePrice: 100,
-              actualPrice: 0,
-              functionality: "Good",
-              goodsCondition: "全新",
-              postDate: new Date(),
-              viewCount: 0,
-              wantedCount: 0
+    load() {
+      this.$axios.get("goods/list",
+          {
+            params: {
+              current: this.page.current,
+              size: this.page.size
             }
-        );
-      }
-      // this.$alert("Hello");
+          }).then((res) => {
+        this.goodsList = this.goodsList.concat(res.data.records);
+        this.page.total = res.data.total;
+      });
+    },
+    addData() {
+      if (this.page.current >= this.page.total) return;
+      this.page.current++;
+      this.load();
     }
   }
 }
@@ -161,6 +151,7 @@ export default {
 .money-want-wrapper {
   display: flex;
   align-items: baseline;
+
   * {
     margin: 0 5px;
   }
@@ -175,5 +166,14 @@ export default {
 .want {
   color: gray;
   font-size: 1em;
+}
+
+.time {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  span {
+    color: #cccccc;
+  }
 }
 </style>
