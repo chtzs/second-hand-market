@@ -46,7 +46,7 @@ const routes = [
         children: [
             {
                 name: 'userManagement',
-                path: '/user/management',
+                path: '/management/user',
                 component: () => import('@/views/admin/UserManagement')
             }
         ]

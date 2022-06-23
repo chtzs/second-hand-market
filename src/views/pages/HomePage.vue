@@ -7,6 +7,7 @@
           <el-link v-if="!login" :href="loginUrl">登录</el-link>
           <el-link v-if="!login" :href="registerUrl">注册</el-link>
           <el-link v-if="login" :href="userCenter">个人中心</el-link>
+          <el-link v-if="admin" :href="adminCenter">管理中心</el-link>
         </div>
       </template>
     </my-header>
@@ -32,13 +33,18 @@ export default {
       loginUrl: "/login",
       registerUrl: "/register",
       userCenter: "",
-      login: false
+      adminCenter: "",
+      login: false,
+      admin: false
     }
   },
   created() {
+    this.$axios.get("user/detail").then(data => {
+      this.admin = data.identity === 0;
+    }).catch(() => {
+      this.$router.push('/login');
+    });
     this.login = this.$cookie.has('token');
-    console.log(this.$cookie.has('token'));
-    console.log(this.$cookie.has('cht'));
   },
   methods: {
     search() {
