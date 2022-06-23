@@ -28,12 +28,12 @@ export default {
   components: {MyFooter, MyHeader},
   created() {
     this.$axios.get("user/detail").then(data => {
-      if (data.identity === 0) {
+      if (data.data.identity === 0) {
         this.notifyError("你没有权限");
-        this.$router.push('/home');
+        // this.$router.push('/home');
       }
     }).catch(() => {
-      this.$router.push('/home');
+      // this.$router.push('/home');
     });
   }
 }

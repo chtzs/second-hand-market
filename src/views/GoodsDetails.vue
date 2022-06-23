@@ -1,4 +1,5 @@
 <template>
+  <h1>{{ goods.name }}</h1>
   <el-carousel :interval="4000" type="card" height="200px">
     <el-carousel-item v-for="item in randomImageList" :key="item">
       <img class="carousel-img" :src="item" alt="轮播图">
@@ -27,9 +28,7 @@
         </el-col>
       </el-row>
       <div class="description">
-        球状闪电，俗称滚地雷。通常在雷暴时发生，为圆球形状的闪电。这是一种真实的物理现象。它十分亮，近圆球形，直径约15至40厘米不等。通常仅维持数秒，但也有维持了1至2分钟的记录。颜色除常见的橙色和红色外，还有黄色、紫色、蓝色、亮白色、幽绿色的光环，呈多种多样的色彩。
-        球状闪电的危害较大，它可以随气流起伏在近地空中自在飘飞或逆风而行。它可以通过开着的门窗进入室内，常见的是穿过烟囱后进入建筑物。它甚至可以在导线上滑动，有时会悬停，有时会无声消失，有时又会因为碰到障碍物爆炸。
-        球状闪电是形成雷电的电动趋势，在半击穿空气时产生的空气离子球。它其中携带能量，包裹相对稳定。当有导体破坏它的平衡时，它会和周围的空气中和，并释放出能量。
+        {{ goods.description }}
       </div>
     </el-col>
   </el-row>
@@ -42,8 +41,24 @@ import DescriptionItem from "@/components/DescriptionItem";
 export default {
   name: "GoodsDetails",
   components: {DescriptionItem},
+  created() {
+    const parameters = this.$url.getParameters(location.search);
+    console.log(parameters);
+    if (parameters['id']) {
+      this.goodsId = parameters['id'];
+    }
+    this.$axios.get("goods/detail",
+        {
+          params: {
+            goodsId: this.goodsId
+          }
+        }).then((res) => {
+      this.goods = res.data;
+    }).catch();
+  },
   data() {
     return {
+      goodsId: 0,
       goods: {
         id: 0,
         sellerId: 0,

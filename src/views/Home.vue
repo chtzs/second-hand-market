@@ -41,9 +41,11 @@
               <span>{{ goods.name }}</span>
               <el-row justify="space-between">
                 <div class="time">
-                  <span>发布日期:{{ this.$dateFormat(new Date(goods.postDate), 'yyyy-MM-dd')}}</span>
+                  <span>发布日期:{{ this.$dateFormat(new Date(goods.postDate), 'yyyy-MM-dd') }}</span>
                 </div>
-                <el-button type="success" class="button">让我看看</el-button>
+                <el-button type="success" class="button" @click="gotoDetail(goods.id)">
+                  让我看看
+                </el-button>
               </el-row>
             </div>
           </el-card>
@@ -91,6 +93,9 @@ export default {
       if (this.page.current >= this.page.total) return;
       this.page.current++;
       this.load();
+    },
+    gotoDetail(id) {
+      window.open('/goods/details?id=' + id, "_blank");
     }
   }
 }
@@ -172,6 +177,7 @@ export default {
   flex: 1;
   display: flex;
   align-items: center;
+
   span {
     color: #cccccc;
   }
