@@ -11,8 +11,7 @@
         </el-icon>
       </template>
     </MyInput>
-    <el-slider v-model="registerForm.progress" :min="phoneMin" :max="phoneMax" :format-tooltip="format"/>
-    <MyInput :model-value="format(registerForm.progress)" placeholder="PhoneNumber" type="text" tabindex="1"
+    <MyInput v-model="registerForm.phoneNumber" placeholder="PhoneNumber" type="text" tabindex="1"
              auto-complete="on">
       <template v-slot:prefix>
         <el-icon>
@@ -20,11 +19,15 @@
         </el-icon>
       </template>
     </MyInput>
-    <MyInput v-model="registerForm.phoneNumber" placeholder="PhoneNumber" type="text" tabindex="1"
-             auto-complete="on">
+    <el-row style="height: 50px;width: 100%;margin-top: 10px;">
+      <MyInput v-model="captcha" placeholder="图形验证码" style="flex: 1"></MyInput>
+      <img :src="captchaUrl" width="110" height="40" alt="验证码" @click="captchaUrl = captchaBase + '?' + Math.random()"/>
+    </el-row>
+    <el-button type="success" style="width: 100%;margin: 10px 0;" @click="send">发送手机验证码！</el-button>
+    <MyInput v-model="code" placeholder="手机验证码" style="flex: 1">
       <template v-slot:prefix>
         <el-icon>
-          <Phone/>
+          <Message/>
         </el-icon>
       </template>
     </MyInput>
@@ -70,7 +73,7 @@
 <script setup>
 import MyInput from "@/components/MyInput";
 // eslint-disable-next-line no-unused-vars
-import {Avatar, Lock, Bell, BellFilled, Phone} from '@element-plus/icons-vue';
+import {Avatar, Lock, Bell, BellFilled, Phone, Message} from '@element-plus/icons-vue';
 </script>
 
 <script>
@@ -80,17 +83,17 @@ export default {
     return {
       registerForm: {
         nickname: '',
-        progress: 0,
-        phoneNumber: 0,
+        phoneNumber: '',
         password: '',
         confirmPassword: ''
       },
       loading: false,
       passwordType: 'password',
       redirect: undefined,
-      text: "",
-      phoneMin: 0,
-      phoneMax: 100000
+      captchaBase: this.$target + 'api/captcha',
+      captchaUrl: this.$target + 'api/captcha',
+      captcha: '',
+      code: ''
     }
   },
   methods: {
@@ -104,16 +107,6 @@ export default {
         this.$refs.password.focus()
       })
     },
-    format(value) {
-      // - (x - (a + b) / 2)
-      if (value === 0) return 10000000000;
-      else if (value === this.phoneMax) return 99999999999;
-      let pMin = 100000;
-      let pMax = 999999;
-      let prefix = Math.floor(value * (pMax - pMin) / this.phoneMax + pMin);
-      let suffix = pMin + pMax - prefix;
-      return parseInt((prefix * pMin + suffix).toString());
-    },
     register() {
       if (this.registerForm.password !== this.registerForm.confirmPassword) {
         this.notifyError("两次密码不一致");
@@ -123,13 +116,24 @@ export default {
         params: {
           nickname: this.registerForm.nickname,
           phoneNumber: this.registerForm.phoneNumber,
-          password: this.registerForm.password
+          password: this.registerForm.password,
+          code: this.code
         }
       }).then((data) => {
         this.notifySucceed(data.msg);
         this.$router.push('/login');
       }).catch(() => {
       });
+    },
+    send(){
+      this.$axios.get('sms/send', {
+        params: {
+          captcha: this.captcha,
+          phoneNumber: this.registerForm.phoneNumber
+        }
+      }).then(data => {
+        this.notifySucceed(data.msg);
+      }).catch();
     }
   }
 }
@@ -146,7 +150,7 @@ $light_gray: #fff;
   position: relative;
   width: 520px;
   max-width: 100%;
-  padding: 160px 35px 0;
+  padding: 50px 35px 0;
   margin: 0 auto;
   overflow: hidden;
 }

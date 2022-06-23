@@ -3,6 +3,8 @@ import axios from 'axios';
 import JsonBig from 'json-bigint';
 import cookie from "@/utils/cookie";
 
+axios.defaults.withCredentials = true;
+
 let wrapper = function (vueApp) {
     const request = axios.create({
         //默认添加的URL，会加在request请求的URL之前，在新的网络环境中要修改，改成后端所在的位置
