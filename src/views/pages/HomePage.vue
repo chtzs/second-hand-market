@@ -29,11 +29,16 @@ export default {
   components: {MyFooter, MyHeader, SearchBar},
   data() {
     return {
-      loginUrl: "",
-      registerUrl: "",
+      loginUrl: "/login",
+      registerUrl: "/register",
       userCenter: "",
       login: false
     }
+  },
+  created() {
+    this.login = this.$cookie.has('token');
+    console.log(this.$cookie.has('token'));
+    console.log(this.$cookie.has('cht'));
   },
   methods: {
     search() {

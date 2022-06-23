@@ -17,6 +17,16 @@ import MyHeader from "@/components/MyHeader";
 export default {
   name: "AdminPage",
   components: {MyFooter, MyHeader},
+  created() {
+    this.$axios.get("user/detail").then(data => {
+      if (data.identity === 0) {
+        this.notifyError("你没有权限");
+        this.$router.push('/home');
+      }
+    }).catch(() => {
+      this.$router.push('/home');
+    });
+  }
 }
 </script>
 

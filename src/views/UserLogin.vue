@@ -109,9 +109,10 @@ export default {
           }
       ).then((data) => {
         this.notifySucceed(data.msg);
-        this.$cookie.set('token', data.token);
-        this.$router.push('/home');
-      }).catch(() => {
+        this.$cookie.set('token', data.data.token);
+        window.location = '/home';
+      }).catch((err) => {
+        console.log(err);
       });
     }
   }

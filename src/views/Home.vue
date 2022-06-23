@@ -77,7 +77,7 @@ export default {
       randomImage: "https://www.apple.com.cn/v/macbook-pro-13/m/images/overview/hero_endframe__bsza6x4fldiq_large_2x.jpg"
     }
   },
-  beforeMount() {
+  created() {
     this.addData();
   },
   methods: {

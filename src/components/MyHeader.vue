@@ -45,6 +45,9 @@ $content-child-margin: 10px;
 
 .content {
   height: 100%;
+  * {
+    margin: 0 $content-child-margin;
+  }
 }
 
 .logo {
