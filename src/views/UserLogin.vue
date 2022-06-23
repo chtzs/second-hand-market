@@ -98,7 +98,7 @@ export default {
       })
     },
     register() {
-      this.$router.push('/register');
+      window.location = '/register';
     },
     login() {
       this.$axios.get('user/login', {

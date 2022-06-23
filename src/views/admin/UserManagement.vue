@@ -12,7 +12,6 @@
                        @handleCurrentChange="handleCurrentChange"
                        @updateItem="updateUser"
                        @deleteItem="deleteUser">
-
     <template #updateItem="scope">
       <el-form-item :label="scope.label" :label-width="scope.labelWidth">
         <el-input :disabled="scope.disabled" v-model="scope.updateData[scope.item]" autocomplete="off"/>
@@ -99,11 +98,4 @@ export default {
 </script>
 
 <style lang="scss">
-.ellipsis {
-  .cell {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-}
 </style>

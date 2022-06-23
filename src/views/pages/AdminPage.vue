@@ -2,7 +2,16 @@
   <div class="container">
     <el-container>
       <el-header>
-        <my-header></my-header>
+        <my-header home-url="/home">
+          <template v-slot:right>
+            <div class="link-list">
+              <el-link href="/management/user">用户管理</el-link>
+              <el-link href="/management/goods">商品管理</el-link>
+              <el-link href="/management/review">审核管理</el-link>
+              <el-link href="/management/order">订单管理</el-link>
+            </div>
+          </template>
+        </my-header>
       </el-header>
       <router-view></router-view>
     </el-container>
@@ -30,6 +39,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+$content-child-margin: 10px;
+.link-list {
+  * {
+    margin: 0 $content-child-margin;
+    height: 100%;
+  }
+}
 </style>

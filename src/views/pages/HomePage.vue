@@ -1,7 +1,7 @@
 <template>
   <el-backtop :right="50" :bottom="100"/>
   <div class="container">
-    <my-header>
+    <my-header home-url="/home">
       <template v-slot:right>
         <div class="link-list">
           <el-link v-if="!login" :href="loginUrl">登录</el-link>
@@ -33,16 +33,16 @@ export default {
       loginUrl: "/login",
       registerUrl: "/register",
       userCenter: "",
-      adminCenter: "",
+      adminCenter: "/management/user",
       login: false,
       admin: false
     }
   },
   created() {
     this.$axios.get("user/detail").then(data => {
-      this.admin = data.identity === 0;
+      this.admin = data.data.identity === 1;
     }).catch(() => {
-      this.$router.push('/login');
+      window.location = '/login';
     });
     this.login = this.$cookie.has('token');
   },
