@@ -44,7 +44,7 @@ export default {
     this.$axios.get("user/detail").then(data => {
       this.admin = data.data.identity === 1;
     }).catch(() => {
-      window.location = '/login';
+      // window.location = '/login';
     });
     this.login = this.$cookie.has('token');
   },
