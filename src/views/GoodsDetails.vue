@@ -24,7 +24,7 @@
           <span style="color: red;font-weight: bold;font-size: 2em">￥{{ goods.actualPrice }}</span>
         </el-col>
         <el-col :span="16">
-          <el-button style="width: 100%" type="success">出价！</el-button>
+          <el-button style="width: 100%" type="success" @click="offer(goods.id)">出价！</el-button>
         </el-col>
       </el-row>
       <div class="description">
@@ -37,13 +37,14 @@
 
 <script>
 import DescriptionItem from "@/components/DescriptionItem";
+import {ElMessageBox} from 'element-plus'
 
 export default {
   name: "GoodsDetails",
   components: {DescriptionItem},
   created() {
     const parameters = this.$url.getParameters(location.search);
-    console.log(parameters);
+    // console.log(parameters);
     if (parameters['id']) {
       this.goodsId = parameters['id'];
     }
@@ -81,6 +82,25 @@ export default {
         // "https://api.ixiaowai.cn/mcapi/mcapi.php",
         // "https://api.ixiaowai.cn/gqapi/gqapi.php"
       ]
+    }
+  },
+  methods: {
+    offer(goodsId) {
+      ElMessageBox.prompt('你想出个什么价？', 'Tip', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+      })
+          .then(({value}) => {
+            this.$axios.get("bid/offer", {
+              params: {
+                goodsId: goodsId,
+                price: value
+              }
+            })
+                .then((res) => {
+                  this.notifySucceed(res.msg);
+                })
+          })
     }
   }
 }

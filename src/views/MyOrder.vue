@@ -1,17 +1,19 @@
 <template>
-  <data-table-template show-detail-text="审核详情"
-                       detail-title="审核详情"
+  <data-table-template show-detail-text="订单详情"
+                       detail-title="订单详情"
                        delete-text="删除"
                        confirm-delete-title="删除确认"
                        :current="page.current"
                        :total="page.total"
                        :size="page.size"
-                       :data-type="review"
+                       :data-type="order"
                        :table-data="tableData"
                        :disable-list="disableList"
-                       @handleCurrentChange="handleCurrentChange"
-                       @updateItem="updateItem"
-                       @deleteItem="deleteItem">
+                       :cell-width="()=>180"
+                       @handleCurrentChange="handleCurrentChange">
+    <template #additionalButton="scope">
+      <el-button @click="pay(scope.row.id)">付款</el-button>
+    </template>
     <template #updateItem="scope">
       <el-form-item :label="scope.label" :label-width="scope.labelWidth">
         <el-input :disabled="scope.disabled" v-model="scope.updateData[scope.item]" autocomplete="off"/>
@@ -24,17 +26,20 @@
 import DataTableTemplate from "@/components/DataTableTemplate";
 
 export default {
-  name: "ReviewManagement",
+  name: "MyOrder",
   components: {DataTableTemplate},
   data() {
     return {
       tableData: [],
-      review: {
+      order: {
         id: "ID",
-        goodsId: "商品id",
-        status: "审核状态，0为待审核，1为通过"
+        orderNumber: "订单编号",
+        payDate: "支付时间",
+        actualPay: "实付款",
+        tradeStatus: "订单状态",
+        alipayTradeNumber: "支付宝订单编号"
       },
-      disableList: ['id', 'goodsId'],
+      disableList: ['id', 'orderNumber', 'payDate', 'actualPay', 'tradeStatus', 'alipayTradeNumber'],
       page: {
         total: 0,
         current: 1,
@@ -52,7 +57,7 @@ export default {
     },
 
     load() {
-      this.$axios.get("review/list",
+      this.$axios.get("order/list",
           {
             params: {
               current: this.page.current,
@@ -64,22 +69,16 @@ export default {
       });
     },
 
-    updateItem(newItem) {
-      console.log(newItem)
-      this.$axios.get("review/update", {
-        params: {
-          reviewId: parseInt(newItem.id),
-          status: parseInt(newItem.status)
-        }
-      }).then((res) => {
-        this.notifySucceed(res.msg);
-        this.load();
-        this.dialogTableVisible = false;
-      }).catch();
-    },
-
-    deleteItem() {
-      this.notifyError("这玩意不能删");
+    pay(orderId) {
+      this.$axios.get("pay/pay",
+          {
+            params: {
+              orderId: orderId
+            }
+          }).then((res) => {
+        let n = window.open();
+        n.document.writeln(res.data);
+      });
     }
   }
 }

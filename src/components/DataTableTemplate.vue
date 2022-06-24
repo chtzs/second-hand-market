@@ -11,6 +11,7 @@
                 @click="showDeleteDialog(scope.$index, scope.row)"
             >{{ deleteText }}
             </el-button>
+            <slot name="additionalButton" :row="scope.row"/>
           </template>
         </el-table-column>
         <el-table-column v-for="item in Object.keys(dataType)" :key="item" :prop="item" :label="dataType[item]"

@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     load() {
-      this.$axios.get("goods/list",
+      this.$axios.get("goods/admin/list",
           {
             params: {
               current: this.page.current,

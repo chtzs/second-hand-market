@@ -1,17 +1,19 @@
 <template>
-  <data-table-template show-detail-text="商品详情"
+  <data-table-template show-detail-text="报价详情"
                        detail-title="商品详情"
                        delete-text="删除"
                        confirm-delete-title="删除确认"
                        :current="page.current"
                        :total="page.total"
                        :size="page.size"
-                       :data-type="goods"
+                       :data-type="bid"
                        :table-data="tableData"
                        :disable-list="disableList"
-                       @handleCurrentChange="handleCurrentChange"
-                       @updateItem="updateItem"
-                       @deleteItem="deleteItem">
+                       :cell-width="()=>180"
+                       @handleCurrentChange="handleCurrentChange">
+    <template #additionalButton="scope">
+      <el-button @click="createOrder(scope.row.id)">就他了！</el-button>
+    </template>
     <template #updateItem="scope">
       <el-form-item :label="scope.label" :label-width="scope.labelWidth">
         <el-input :disabled="scope.disabled" v-model="scope.updateData[scope.item]" autocomplete="off"/>
@@ -24,36 +26,33 @@
 import DataTableTemplate from "@/components/DataTableTemplate";
 
 export default {
-  name: "GoodsManagement",
+  name: "MyBid",
   components: {DataTableTemplate},
+  created() {
+    const parameters = this.$url.getParameters(location.search);
+    if (parameters['id']) {
+      this.goodsId = parameters['id'];
+    }
+    this.load();
+  },
   data() {
     return {
+      goodsId: 0,
       tableData: [],
-      goods: {
+      bid: {
         id: "ID",
-        sellerId: "卖家id",
-        name: "商品名称",
-        image: "商品图片",
-        description: "描述",
-        fakePrice: "假价格",
-        actualPrice: "真价格",
-        functionality: "功能性",
-        goodsCondition: "成色",
-        postDate: "发布日期",
-        viewCount: "浏览次数",
-        wantedCount: "想要次数",
-        status: "状态"
+        goodsId: "商品id",
+        buyerId: "买家id",
+        offer: "报价",
+        createDate: "提交时间"
       },
-      disableList: ['id', 'sellerId', 'postDate'],
+      disableList: ['id', 'goodsId', 'buyerId', 'offer', 'createDate'],
       page: {
         total: 0,
         current: 1,
         size: 10
       }
     }
-  },
-  created() {
-    this.load();
   },
   methods: {
     handleCurrentChange(pageNum) {
@@ -62,11 +61,14 @@ export default {
     },
 
     load() {
-      this.$axios.get("goods/admin/list",
+      this.$axios.get("bid/list",
           {
             params: {
               current: this.page.current,
-              size: this.page.size
+              size: this.page.size,
+              goodsId: this.goodsId,
+              column: "offer",
+              order: "desc"
             }
           }).then((res) => {
         this.tableData = res.data.records;
@@ -74,28 +76,15 @@ export default {
       });
     },
 
-    updateItem(newItem) {
-      console.log(newItem)
-      this.$axios.post("goods/admin/update", {
-        goods: newItem
-      }).then((res) => {
+    createOrder(bidId) {
+      this.$axios.get("order/gen",
+          {
+            params: {
+              bidId: bidId
+            }
+          }).then((res) => {
         this.notifySucceed(res.msg);
-        this.load();
-        this.dialogTableVisible = false;
-      }).catch();
-    },
-
-    deleteItem(newItem) {
-      console.log(newItem.id);
-      this.$axios.get("goods/admin/delete", {
-        params: {
-          goodsId: newItem.id
-        }
-      }).then((res) => {
-        this.notifySucceed(res.msg);
-        this.load();
-      }).catch();
-      this.deleteDialogVisible = false;
+      });
     }
   }
 }

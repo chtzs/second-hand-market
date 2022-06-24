@@ -6,7 +6,8 @@
         <div class="link-list">
           <el-link v-if="!login" :href="loginUrl">登录</el-link>
           <el-link v-if="!login" :href="registerUrl">注册</el-link>
-          <el-link v-if="login" :href="userCenter">个人中心</el-link>
+          <el-link v-if="login" href="/my/goods">我的商品</el-link>
+          <el-link v-if="login" href="/my/order">我的订单</el-link>
           <el-link v-if="admin" :href="adminCenter">管理中心</el-link>
         </div>
       </template>
