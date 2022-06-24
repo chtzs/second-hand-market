@@ -2,7 +2,7 @@
   <el-form ref="form" class="form" auto-complete="on"
            label-position="left">
     <div class="title-container">
-      <h3 class="title">注册成为八路军！</h3>
+      <h3 class="title">注册成为我们的用户！</h3>
     </div>
     <MyInput v-model="registerForm.nickname" placeholder="Nickname" type="text" tabindex="1" auto-complete="on">
       <template v-slot:prefix>

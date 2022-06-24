@@ -8,7 +8,7 @@ axios.defaults.withCredentials = true;
 let wrapper = function (vueApp) {
     const request = axios.create({
         //默认添加的URL，会加在request请求的URL之前，在新的网络环境中要修改，改成后端所在的位置
-        baseURL: 'http://localhost:8080/api/',
+        baseURL: 'http://d5qxrr.natappfree.cc/api/',
         timeout: 5000,
         transformResponse: [
             function (response) {

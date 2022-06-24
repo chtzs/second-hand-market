@@ -8,7 +8,7 @@
       <my-avatar :src="require('@/assets/me.png')"/>
 
       <div class="title-container">
-        <h3 class="title">八路军管理系统</h3>
+        <h3 class="title">登录我们的二手平台！</h3>
       </div>
 
       <MyInput ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
