@@ -52,6 +52,11 @@ const routes = [
                 name: 'myBid',
                 path: '/my/bid',
                 component: () => import('@/views/MyBid')
+            },
+            {
+                name: 'postGoods',
+                path: '/my/post',
+                component: () => import('@/views/PostGoods')
             }
         ]
     },

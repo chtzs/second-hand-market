@@ -8,6 +8,7 @@
           <el-link v-if="!login" :href="registerUrl">注册</el-link>
           <el-link v-if="login" href="/my/goods">我的商品</el-link>
           <el-link v-if="login" href="/my/order">我的订单</el-link>
+          <el-link v-if="login" href="/my/post">发布商品</el-link>
           <el-link v-if="admin" :href="adminCenter">管理中心</el-link>
         </div>
       </template>
